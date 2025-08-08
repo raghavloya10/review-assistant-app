@@ -1,13 +1,13 @@
 import { useState } from "react";
 import "../styles/ReviewAssistant.css";
-
 // The main component for our review assistant app.
 const ReviewAssistant = () => {
   const [review, setReview] = useState("");
   const [response, setResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  // NEW: State to store the selected emotion.
+  const [emotion, setEmotion] = useState("polite");
   // This function handles the submission of the review.
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,26 +19,20 @@ const ReviewAssistant = () => {
     setIsLoading(true);
     setError(null);
     setResponse(""); // Clear previous response
-
-    // The prompt for the AI model to generate a professional and helpful response to a review.
-    const prompt = `You are a professional customer service assistant for a local business named CREO Solutions (Contact: +91 98765 56789). 
-      The following is a customer review. Please generate a helpful, positive, polite response without asking questions.
-      Do not use any placeholders. Use generic words like valued customer etc. 
+    // NEW: Incorporate the selected emotion into the prompt.
+    const prompt = `You are a professional customer service assistant for a local business named CREO Solutions (Contact: +91 98765 56789).
+      The following is a customer review. Please generate a helpful, ${emotion}, and professional response without asking questions.
+      Do not use any placeholders. Use generic words like valued customer etc.
       The message should also convey the action being taken as part of the review.
-    
+
     Customer Review: "${review}"
-    
+
     Assistant Response:`;
 
-    // The chat history to send to the API.
     let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
     const payload = { contents: chatHistory };
-
-    // The API key is handled by the Canvas environment.
     const apiKey = "AIzaSyATqkGdkBB3FD8fSIu_m59UQ6ZRlAeCtVE";
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-    // A simple function to handle retries with exponential backoff.
     const callApiWithRetry = async (
       url,
       options,
@@ -101,7 +95,27 @@ const ReviewAssistant = () => {
         {/* <h1 className="company-name"> CREO Solutions </h1> */}
         {/* <h2 className="main-title">Review Response Assistant</h2> */}
         <p className="main-subtitle">
-          Generate a professional and polite response to any customer review.
+          Generate a professional and 
+          <span>
+            <select
+                id="emotion-select"
+                className="emotion-select"
+                value={emotion}
+                onChange={(e) => setEmotion(e.target.value)}
+              >
+              <option value="polite">Polite</option>
+              <option value="empathetic">Empathetic</option>
+              <option value="formal">Formal</option>
+              <option value="upbeat">Upbeat</option>
+              <option value="friendly">Friendly</option>
+              <option value="professional">Professional</option>
+              <option value="calm">Calm</option>
+              <option value="humble">Humble</option>
+              <option value="confident">Confident</option>
+              <option value="funny">Funny</option>
+            </select>
+          </span>
+           response to any customer review.
         </p>
         <form onSubmit={handleSubmit} className="form-section">
           <div>
@@ -169,5 +183,4 @@ const ReviewAssistant = () => {
     </div>
   );
 };
-
 export default ReviewAssistant;

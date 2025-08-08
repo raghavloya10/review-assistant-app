@@ -63,6 +63,16 @@
     color: #64748b;
     /* slate-500 */
     margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.main-subtitle span {
+    display: inline;
+    margin-left: 6px;
+    margin-right: 6px;
+    padding: 0;
+    width: fit-content;
 }
 
 .form-section {
@@ -199,4 +209,17 @@
     white-space: pre-wrap;
     line-height: 1.625;
     /* leading-relaxed */
+}
+
+.emotion-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    color: #4f46e5;
+    cursor: pointer;
+    font-weight: bold;
 }
